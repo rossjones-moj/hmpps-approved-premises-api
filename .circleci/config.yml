@@ -379,6 +379,7 @@ workflows:
             branches:
               only:
                 - main
+                - main-spring-boot-2
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -390,6 +391,7 @@ workflows:
             branches:
               only:
                 - main
+                - main-spring-boot-2
           requires:
             - build_docker
             - helm_lint
