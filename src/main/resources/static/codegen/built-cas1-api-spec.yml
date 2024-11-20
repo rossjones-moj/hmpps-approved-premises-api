@@ -6205,6 +6205,8 @@ components:
         - sharedProperty
         - singleOccupancy
         - wheelchairAccessible
+    GarethObject:
+      type: string
     Cas1PremisesBasicSummary:
       type: object
       properties:

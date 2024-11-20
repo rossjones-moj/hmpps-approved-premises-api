@@ -4329,6 +4329,37 @@ paths:
               schema:
                 type: string
                 format: binary
+  /gareth:
+    get:
+      tags:
+        - Reports
+      summary: Returns a spreadsheet showing how many days per month each bedspace spent in which state and the overall occupancy rate.
+      parameters:
+        - name: X-Service-Name
+          in: header
+          required: true
+          description: Only bookings for this service will be returned
+          schema:
+            $ref: '#/components/schemas/ServiceName'
+        - name: month
+          in: query
+          required: true
+          description: Only bookings for this month will be returned - must be provided with year
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/GarethObject'
+        401:
+          $ref: '#/components/responses/401Response'
+        403:
+          $ref: '#/components/responses/403Response'
+        500:
+          $ref: '#/components/responses/500Response'
 components:
   responses:
     401Response:
@@ -9509,3 +9540,5 @@ components:
         - sharedProperty
         - singleOccupancy
         - wheelchairAccessible
+    GarethObject:
+      type: string

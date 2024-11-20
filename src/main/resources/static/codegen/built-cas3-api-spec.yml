@@ -5230,3 +5230,5 @@ components:
         - sharedProperty
         - singleOccupancy
         - wheelchairAccessible
+    GarethObject:
+      type: string
