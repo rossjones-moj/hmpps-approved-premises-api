@@ -405,6 +405,7 @@ tasks.get("openApiGenerate").dependsOn(
   "openApiPreCompilation",
   "openApiGenerateCas1Namespace",
   "openApiGenerateCas2Namespace",
+  "openApiGenerateCas2BailNamespace",
   "openApiGenerateCas3Namespace",
 )
 
