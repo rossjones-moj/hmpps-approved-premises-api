@@ -31,7 +31,9 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/GarethObject'
+                type: array
+                items:
+                  $ref: '#/components/schemas/GarethObject'
         401:
           $ref: '#/components/responses/401Response'
         403:

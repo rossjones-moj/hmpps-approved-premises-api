@@ -59,6 +59,7 @@ class OAuth2ResourceServerSecurityConfiguration {
         authorize(HttpMethod.GET, "/favicon.ico", permitAll)
         authorize(HttpMethod.GET, "/info", permitAll)
         authorize(HttpMethod.GET, "/gareth",  hasRole("CAS2_ASSESSOR"))
+        authorize(HttpMethod.GET, "/cas2bail/toby",  hasRole("CAS2_ASSESSOR"))
         authorize(HttpMethod.GET, "/cas2bail/applications", hasRole("CAS2_ASSESSOR"))
         authorize(HttpMethod.POST, "/seed", permitAll)
         authorize(HttpMethod.DELETE, "/cache/*", permitAll)
