@@ -1,0 +1,181 @@
+openapi: 3.0.1
+info:
+  title: 'Community Accommodation Services: Tier 2 (CAS2) Bail'
+  version: 1.0.0
+servers:
+  - url: /cas2bail
+paths:
+  /applications:
+    post:
+      tags:
+        - Operations on CAS2 Bail applications
+      summary: Creates a CAS2 Bail application
+      requestBody:
+        description: Information to create a blank application with
+        content:
+          'application/json':
+            schema:
+              $ref: '_shared.yml#/components/schemas/NewApplication'
+        required: true
+      responses:
+        201:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/GarethObject'
+        400:
+          description: invalid params
+          content:
+            'application/problem+json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/ValidationError'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        404:
+          description: invalid CRN
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Problem'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
+      x-codegen-request-body-name: body
+    get:
+      tags:
+        - Operations on CAS2 Bail applications
+      summary: List summaries of all CAS2 Bail applications authorised for the logged in user
+      parameters:
+        - name: isSubmitted
+          in: query
+          description: Returns submitted applications if true, un submitted applications if false, and all applications if absent
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          description: Page number of results to return.  If blank, returns all results
+          schema:
+            type: integer
+        - name: prisonCode
+          in: query
+          description: Prison code of applications to return.  If blank, returns all results.
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '_shared.yml#/components/schemas/Cas2ApplicationSummary'
+          headers:
+            X-Pagination-CurrentPage:
+              $ref: '_shared.yml#/components/headers/X-Pagination-CurrentPage'
+            X-Pagination-TotalPages:
+              $ref: '_shared.yml#/components/headers/X-Pagination-TotalPages'
+            X-Pagination-TotalResults:
+              $ref: '_shared.yml#/components/headers/X-Pagination-TotalResults'
+            X-Pagination-PageSize:
+              $ref: '_shared.yml#/components/headers/X-Pagination-TotalResults'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
+
+  /applications/{applicationId}:
+    put:
+      tags:
+        - Operations on CAS2 Bail applications
+      summary: Updates a CAS2 Bail application
+      parameters:
+        - name: applicationId
+          in: path
+          description: ID of the application
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Information to update the application with
+        content:
+          'application/json':
+            schema:
+              $ref: '_shared.yml#/components/schemas/UpdateApplication'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Application'
+        400:
+          description: invalid params
+          content:
+            'application/problem+json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/ValidationError'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
+      x-codegen-request-body-name: body
+    get:
+      tags:
+        - Operations on CAS2 applications
+      summary: Gets a single CAS2 application by its ID
+      parameters:
+        - name: applicationId
+          in: path
+          description: ID of the application
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Application'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
+  /applications/{applicationId}/abandon:
+    put:
+      tags:
+        - Operations on CAS2 applications
+      summary: Abandons an in progress CAS2 application
+      parameters:
+        - name: applicationId
+          in: path
+          description: ID of the application
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: successful operation
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        409:
+          description: The application has been submitted
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Problem'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'

@@ -258,6 +258,14 @@ registerAdditionalOpenApiGenerateTask(
 )
 
 registerAdditionalOpenApiGenerateTask(
+  name = "openApiGenerateCas2BailNamespace",
+  ymlPath = "$rootDir/src/main/resources/static/codegen/built-cas2bail-api-spec.yml",
+  apiPackageName = "uk.gov.justice.digital.hmpps.approvedpremisesapi.api.cas2bail",
+  modelPackageName = "uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model",
+  apiSuffix = "Cas2Bail",
+)
+
+registerAdditionalOpenApiGenerateTask(
   name = "openApiGenerateCas3Namespace",
   ymlPath = "$rootDir/src/main/resources/static/codegen/built-cas3-api-spec.yml",
   apiPackageName = "uk.gov.justice.digital.hmpps.approvedpremisesapi.api.cas3",
@@ -379,6 +387,10 @@ tasks.register("openApiPreCompilation") {
   buildSpecWithSharedComponentsAppended(
     outputFileName = "built-cas2-api-spec.yml",
     inputSpec = "cas2-api.yml",
+  )
+  buildSpecWithSharedComponentsAppended(
+    outputFileName = "built-cas2bail-api-spec.yml",
+    inputSpec = "cas2bail-api.yml",
   )
   buildSpecWithSharedComponentsAppended(
     outputFileName = "built-cas3-api-spec.yml",

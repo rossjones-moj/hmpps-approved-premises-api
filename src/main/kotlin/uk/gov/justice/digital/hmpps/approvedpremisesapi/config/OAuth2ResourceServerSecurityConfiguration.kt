@@ -57,6 +57,7 @@ class OAuth2ResourceServerSecurityConfiguration {
         authorize(HttpMethod.GET, "/cas2-domain-events-api.yml", permitAll)
         authorize(HttpMethod.GET, "/favicon.ico", permitAll)
         authorize(HttpMethod.GET, "/info", permitAll)
+        authorize(HttpMethod.GET, "/gareth",  hasRole("CAS2_ASSESSOR"))
         authorize(HttpMethod.POST, "/seed", permitAll)
         authorize(HttpMethod.DELETE, "/cache/*", permitAll)
         authorize(HttpMethod.POST, "/migration-job", permitAll)

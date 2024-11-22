@@ -2,32 +2,17 @@ package uk.gov.justice.digital.hmpps.approvedpremisesapi.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.GarethApiDelegate
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.ServiceName
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.service.*
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.transformer.*
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.problem.ForbiddenProblem
 
 @Service
-class GarethController(
-  private val httpAuthService: HttpAuthService,
-  private val offenderService: OffenderService,
-  private val personTransformer: PersonTransformer,
-  private val risksTransformer: RisksTransformer,
-  private val prisonCaseNoteTransformer: PrisonCaseNoteTransformer,
-  private val adjudicationTransformer: AdjudicationTransformer,
-  private val alertTransformer: AlertTransformer,
-  private val needsDetailsTransformer: NeedsDetailsTransformer,
-  private val oaSysSectionsTransformer: OASysSectionsTransformer,
-  private val offenceTransformer: OffenceTransformer,
-  private val userService: UserService,
-  private val applicationService: ApplicationService,
-  private val personalTimelineTransformer: PersonalTimelineTransformer,
-  private val featureFlagService: FeatureFlagService,
-) : GarethApiDelegate {
-
+class GarethController : GarethApiDelegate {
 
   override fun garethGet(xServiceName: ServiceName, month: Int): ResponseEntity<String> {
+    if (xServiceName != ServiceName.cas2) {
+      throw ForbiddenProblem()
+    }
     return ResponseEntity.ok("Hello Gareth")
   }
 }
