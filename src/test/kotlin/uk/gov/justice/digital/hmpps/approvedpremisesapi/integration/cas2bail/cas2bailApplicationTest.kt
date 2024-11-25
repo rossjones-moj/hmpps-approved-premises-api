@@ -15,7 +15,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.TimelineEvent
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.integration.IntegrationTestBase
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.integration.givens.givenACas2Assessor
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.integration.givens.givenACas2PomUser
-
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.bodyAsListOfObjects
 
 
 class cas2bailApplicationTest {
@@ -125,34 +125,15 @@ class cas2bailApplicationTest {
           .exchange()
           .expectStatus()
           .isOk
+          .bodyAsListOfObjects<String>()
 
-          .returnResult<String>()
-//          .responseBody
-//          .consumeWith {
-//
-//            val responseBody = it.getResponseBody() as Map<String, Any>
-//            System.out.println("Response Body: " + responseBody); // Print the response
-//          }
+        log.info("rawResponseBody: ${rawResponseBody.size}")
+        log.info("rawResponseBody: ${rawResponseBody[0]}")
 
-        val responseBody =
-          objectMapper.readValue(
-            rawResponseBody,
-            object : TypeReference<List<String>>() {},
-          )
-
-        val expectedItems = mutableListOf<TimelineEvent>()
-
-//        val body = rawResponseBody
-//        val body = objectMapper.readValue<List<String>>(rawResponseBody)
-        //.readValue<List<String>>(rawResponseBody!!)
-//        val body = objectMapper.readValue<List<String>>(rawResponseBody.toString())
-//        val body = objectMapper.readValue<List<String>>(rawResponseBody)
-//        assertThat(body).hasSize(1)
-
-//        val body = objectMapper.readValue(rawResponseBody, List::class.java)
-
-        log.info("rawResponseBody: $body")
-        log.info(rawResponseBody.toString())
+        val firstItem = rawResponseBody.first()
+        val lastItem = rawResponseBody.last()
+        assertThat(firstItem).isEqualTo("Hello Toby")
+        assertThat(lastItem).isEqualTo("Hello Gareth")
 
 
       }
