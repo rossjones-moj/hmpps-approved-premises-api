@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.approvedpremisesapi.controller.cas2bail
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.cas2.ApplicationsCas2Delegate
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.cas2bail.ApplicationsCas2BailDelegate
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Application
@@ -14,7 +15,7 @@ import java.util.*
 
 //ApplicationsCas2BailDelegate
 
-
+@Service
 class Cas2BailApplicationsController(
   private val httpAuthService: HttpAuthService,
   private val applicationService: ApplicationService,
