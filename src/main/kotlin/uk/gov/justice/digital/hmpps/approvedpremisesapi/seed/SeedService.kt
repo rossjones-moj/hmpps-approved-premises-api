@@ -71,7 +71,6 @@ class SeedService(
           getBean(PremisesRepository::class),
           getBean(RoomRepository::class),
           getBean(BedRepository::class),
-          getBean(CharacteristicRepository::class),
           getBean(SiteSurvey::class),
         )
       }
