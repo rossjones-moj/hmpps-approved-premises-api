@@ -5,7 +5,10 @@ import jakarta.transaction.Transactional
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.cas2bail.ApplicationsCas2bailDelegate
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.*
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Application
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.NewApplication
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.SortDirection
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.UpdateApplication
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.cas2bail.Cas2BailApplicationEntity
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.cas2bail.Cas2BailApplicationSummaryEntity
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.problem.BadRequestProblem
@@ -22,7 +25,6 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.transformer.cas2bail.Cas
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.PageCriteria
 import java.net.URI
 import java.util.*
-
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2ApplicationSummary as ModelCas2ApplicationSummary
 
 @Service(
@@ -63,7 +65,7 @@ class Cas2BailApplicationController(
       val applicationResult = cas2BailApplicationService
         .getCas2BailApplicationForUser(
           applicationId,
-          user
+          user,
         )
 
     ) {
@@ -114,7 +116,7 @@ class Cas2BailApplicationController(
 
     val applicationResult = cas2BailApplicationService.updateCas2BailApplication(
       applicationId =
-        applicationId,
+      applicationId,
       data = serializedData,
       user,
     )

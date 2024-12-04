@@ -16,21 +16,18 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.model.ValidationErrors
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.model.reference.Cas2PersistedApplicationStatus
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.model.reference.Cas2PersistedApplicationStatusDetail
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.model.reference.Cas2PersistedApplicationStatusFinder
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.results.AuthorisableActionResult
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.results.CasResult
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.results.ValidatableActionResult
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.service.EmailNotificationService
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.service.cas2.Constants.HDC_APPLICATION_TYPE
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.service.cas2.DomainEventService
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.transformer.cas2.ApplicationStatusTransformer
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.extractEntityFromCasResult
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.toCas2UiFormat
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.toCas2UiFormattedHourOfDay
 import java.time.OffsetDateTime
 import java.util.*
 
 @Service("Cas2BailStatusUpdateService")
-class Cas2BailStatusUpdateService (
+class Cas2BailStatusUpdateService(
   private val cas2BailAssessmentRepository: Cas2BailAssessmentRepository,
   private val cas2BailStatusUpdateRepository: Cas2BailStatusUpdateRepository,
   private val cas2BailStatusUpdateDetailRepository: Cas2BailStatusUpdateDetailRepository,
@@ -62,14 +59,13 @@ class Cas2BailStatusUpdateService (
     val status = findActiveStatusByName(statusUpdate.newStatus)
       ?: return CasResult.GeneralValidationError("The status ${statusUpdate.newStatus} is not valid")
 
-
     val newDetails = statusUpdate.newStatusDetails.isNullOrEmpty()
     val statusDetails = if (newDetails) {
       emptyList()
     } else {
       statusUpdate.newStatusDetails?.map { detail ->
-          status.findStatusDetailOnStatus(detail)
-            ?: return CasResult.GeneralValidationError("The status detail $detail is not valid")
+        status.findStatusDetailOnStatus(detail)
+          ?: return CasResult.GeneralValidationError("The status detail $detail is not valid")
       }
     }
 
@@ -91,20 +87,19 @@ class Cas2BailStatusUpdateService (
     )
 
     statusDetails?.forEach { detail ->
-        cas2BailStatusUpdateDetailRepository.save(
-          Cas2BailStatusUpdateDetailEntity(
-            id = UUID.randomUUID(),
-            statusDetailId = detail.id,
-            statusUpdate = createdStatusUpdate,
-            label = detail.label,
-          ),
-        )
+      cas2BailStatusUpdateDetailRepository.save(
+        Cas2BailStatusUpdateDetailEntity(
+          id = UUID.randomUUID(),
+          statusDetailId = detail.id,
+          statusUpdate = createdStatusUpdate,
+          label = detail.label,
+        ),
+      )
     }
 
     sendEmailStatusUpdated(assessment.application.createdByUser, assessment.application, createdStatusUpdate)
 
     createStatusUpdatedDomainEvent(createdStatusUpdate, statusDetails)
-
 
     return CasResult.Success(createdStatusUpdate)
   }
@@ -116,7 +111,8 @@ class Cas2BailStatusUpdateService (
 
   fun createStatusUpdatedDomainEvent(
     statusUpdate: Cas2BailStatusUpdateEntity,
-    statusDetails: List<Cas2PersistedApplicationStatusDetail>? = emptyList()) {
+    statusDetails: List<Cas2PersistedApplicationStatusDetail>? = emptyList(),
+  ) {
     val domainEventId = UUID.randomUUID()
     val eventOccurredAt = statusUpdate.createdAt
     val application = statusUpdate.application

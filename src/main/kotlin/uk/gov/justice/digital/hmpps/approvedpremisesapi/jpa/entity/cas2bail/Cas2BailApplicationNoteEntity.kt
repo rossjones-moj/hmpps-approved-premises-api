@@ -17,7 +17,6 @@ interface Cas2BailApplicationNoteRepository : JpaRepository<Cas2BailApplicationN
     "SELECT n FROM Cas2BailApplicationNoteEntity n WHERE n.assessment IS NULL",
   )
   fun findAllNotesWithoutAssessment(of: PageRequest): Slice<Cas2BailApplicationNoteEntity>
-
 }
 
 @Entity
