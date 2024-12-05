@@ -26,7 +26,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.toCas2UiFormattedHo
 import java.time.OffsetDateTime
 import java.util.*
 
-@Service("Cas2BailStatusUpdateService")
+@Service()
 class Cas2BailStatusUpdateService(
   private val cas2BailAssessmentRepository: Cas2BailAssessmentRepository,
   private val cas2BailStatusUpdateRepository: Cas2BailStatusUpdateRepository,

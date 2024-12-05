@@ -24,7 +24,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.extractEntityFromCa
 import java.net.URI
 import java.util.*
 
-@Service("Cas2BailAssessmentsController")
+@Service()
 class Cas2BailAssessmentsController(
   private val cas2BailAssessmentService: Cas2BailAssessmentService,
   private val cas2BailApplicationNoteService: Cas2BailApplicationNoteService,

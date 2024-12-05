@@ -76,11 +76,11 @@ data class Cas2BailApplicationEntity(
 
   @OneToMany(mappedBy = "application")
   @OrderBy("createdAt DESC")
-  var statusUpdates: MutableList<Cas2BailStatusUpdateEntity>? = null,
+  var statusUpdates: MutableList<Cas2BailStatusUpdateEntity>? = mutableListOf(),
 
   @OneToMany(mappedBy = "application")
   @OrderBy("createdAt DESC")
-  var notes: MutableList<Cas2BailApplicationNoteEntity>? = null,
+  var notes: MutableList<Cas2BailApplicationNoteEntity>? = mutableListOf(),
 
   @OneToOne(mappedBy = "application")
   var assessment: Cas2BailAssessmentEntity? = null,

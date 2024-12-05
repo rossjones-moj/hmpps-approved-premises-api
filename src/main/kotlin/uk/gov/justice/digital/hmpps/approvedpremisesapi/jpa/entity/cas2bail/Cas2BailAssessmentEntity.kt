@@ -28,7 +28,7 @@ data class Cas2BailAssessmentEntity(
 
   @OneToMany(mappedBy = "assessment")
   @OrderBy("createdAt DESC")
-  var statusUpdates: MutableList<Cas2BailStatusUpdateEntity>? = null,
+  var statusUpdates: MutableList<Cas2BailStatusUpdateEntity>? = mutableListOf(),
 ) {
   override fun toString() = "Cas2BailAssessmentEntity: $id"
 }

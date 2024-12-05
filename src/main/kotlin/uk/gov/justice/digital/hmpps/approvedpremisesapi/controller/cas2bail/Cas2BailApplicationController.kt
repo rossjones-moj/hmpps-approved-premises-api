@@ -28,8 +28,7 @@ import java.util.*
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2ApplicationSummary as ModelCas2ApplicationSummary
 
 @Service(
-  "uk.gov.justice.digital.hmpps.approvedpremisesapi.controller.cas2bail" +
-    ".Cas2BailApplicationsController",
+    "Cas2BailApplicationsController",
 )
 class Cas2BailApplicationController(
   private val httpAuthService: HttpAuthService,
@@ -101,7 +100,7 @@ class Cas2BailApplicationController(
     }
 
     return ResponseEntity
-      .created(URI.create("/cas2/applications/${application.id}"))
+      .created(URI.create("/cas2bail/applications/${application.id}"))
       .body(cas2BailApplicationsTransformer.transformJpaToApi(application, personInfo))
   }
 
@@ -157,7 +156,7 @@ class Cas2BailApplicationController(
     return ResponseEntity.ok(Unit)
   }
 
-  private fun getPersonNamesAndTransformToSummaries(applicationSummaries: List<Cas2BailApplicationSummaryEntity>): List<uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2ApplicationSummary> {
+  private fun getPersonNamesAndTransformToSummaries(applicationSummaries: List<Cas2BailApplicationSummaryEntity>): List<ModelCas2ApplicationSummary> {
     val crns = applicationSummaries.map { it.crn }
 
     val personNamesMap = offenderService.getMapOfPersonNamesAndCrns(crns)

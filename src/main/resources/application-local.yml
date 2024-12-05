@@ -71,8 +71,6 @@ logging:
     org.hibernate.SQL: DEBUG
     # Uncomment the two entries below to see SQL binding
     #org.hibernate.orm.jdbc.bind: TRACE
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.type.descriptor.sql: tract
     # allows us to see the JWT token to simplify local API invocation
     uk.gov.justice.digital.hmpps.approvedpremisesapi.config.RequestResponseLoggingFilter: TRACE
     # allows us to see the request URL and method for upstream requests

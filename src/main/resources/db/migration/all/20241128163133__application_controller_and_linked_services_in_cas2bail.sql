@@ -9,8 +9,8 @@ CREATE TABLE cas_2_bail_application_notes
 (
     id                          UUID NOT NULL,
     application_id              UUID,
-    created_at                  TIMESTAMP WITHOUT TIME ZONE,
-    body                        VARCHAR(255),
+    created_at                  TIMESTAMPTZ,
+    body                        TEXT,
     assessment_id               UUID,
     created_by_nomis_user_id    UUID,
     created_by_external_user_id UUID,

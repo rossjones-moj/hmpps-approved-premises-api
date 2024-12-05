@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.results.CasResult
 import java.time.OffsetDateTime
 import java.util.*
 
-@Service("Cas2BailAssessmentService")
+@Service()
 class Cas2BailAssessmentService(
   private val cas2AssessmentRepository: Cas2BailAssessmentRepository,
 ) {

@@ -38,7 +38,7 @@ import uk.gov.justice.digital.hmpps.approvedpremisesapi.util.getPageableOrAllPag
 import java.time.OffsetDateTime
 import java.util.*
 
-@Service("Cas2BailApplicationService")
+@Service()
 class Cas2BailApplicationService(
   private val cas2BailApplicationRepository: Cas2BailApplicationRepository,
   private val cas2BailLockableApplicationRepository: Cas2BailLockableApplicationRepository,
@@ -73,8 +73,6 @@ class Cas2BailApplicationService(
     user: NomisUserEntity,
     pageCriteria: PageCriteria<String>,
   ): Pair<MutableList<Cas2BailApplicationSummaryEntity>, PaginationMetadata?> {
-    val uid = user.id.toString()
-    val records = cas2BailApplicationSummaryRepository.findByUserId(uid, null)
     val response = if (prisonCode == null) {
       repositoryUserFunctionMap.get(isSubmitted)!!(user.id.toString(), getPageableOrAllPages(pageCriteria))
     } else {
