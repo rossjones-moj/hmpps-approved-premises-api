@@ -58,6 +58,7 @@ class SeedService(
   fun seedExcelData(excelSeedFileType: SeedFromExcelFileType, premisesId: UUID, filename: String) =
     seedExcelData(excelSeedFileType, premisesId, filename) { "${seedConfig.filePrefix}/$filename" }
 
+  @SuppressWarnings("TooGenericExceptionThrown")
   fun seedExcelData(excelSeedFileType: SeedFromExcelFileType, premisesId: UUID, filename: String, resolveXlsxPath: ExcelSeedJob.() -> String) {
     seedLogger.info("Starting seed request: $excelSeedFileType - $filename")
 
