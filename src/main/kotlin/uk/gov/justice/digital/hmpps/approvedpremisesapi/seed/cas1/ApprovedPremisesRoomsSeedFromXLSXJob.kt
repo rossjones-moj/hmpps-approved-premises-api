@@ -20,26 +20,20 @@ import java.util.UUID
 
 class SiteSurveyImportException(message: String) : Exception(message)
 
+@Component
 @Suppress("LongParameterList")
 class ApprovedPremisesRoomsSeedFromXLSXJob(
-  fileName: String,
-  premisesId: UUID,
-  sheetName: String,
   private val premisesRepository: PremisesRepository,
   private val roomRepository: RoomRepository,
   private val bedRepository: BedRepository,
   private val siteSurvey: SiteSurvey,
-) : ExcelSeedJob(
-  fileName = fileName,
-  premisesId = premisesId,
-  sheetName = sheetName,
-) {
+) : ExcelSeedJob() {
   private val log = LoggerFactory.getLogger(this::class.java)
-  override fun processDataFrame(dataFrame: DataFrame<*>) {
+  override fun processDataFrame(dataFrame: DataFrame<*>, premisesId: UUID) {
     findExistingPremisesOrThrow(premisesId)
 
     // build valid lists for rooms, characteristics and beds
-    var rooms = buildRooms(dataFrame)
+    var rooms = buildRooms(dataFrame, premisesId)
     val characteristics = buildCharacteristics(dataFrame)
 
     // add the characteristics to the rooms
@@ -52,12 +46,12 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
     createBedsIfNotExist(beds)
   }
 
-  private fun buildRooms(dataFrame: DataFrame<*>): MutableList<RoomEntity> {
+  private fun buildRooms(dataFrame: DataFrame<*>, premisesId: UUID): MutableList<RoomEntity> {
     val rooms = mutableListOf<RoomEntity>()
 
     for (i in 1..<dataFrame.columnsCount()) {
       val roomAnswers = dataFrame.getColumn(i)
-      val room = createRoom(roomAnswers.name, roomAnswers[0].toString())
+      val room = createRoom(premisesId, roomAnswers.name, roomAnswers[0].toString())
 
       rooms.add(room)
     }
@@ -70,7 +64,7 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
     siteSurvey.questionToCharacterEntityMapping.forEach { (question, characteristic) ->
       val rowId = dataFrame.getColumn(0).values().indexOf(question)
 
-      if (rowId == -1) throw SiteSurveyImportException("Characteristic question '$question' not found on sheet $sheetName.")
+      if (rowId == -1) throw SiteSurveyImportException("Characteristic question '$question' not found on sheet Sheet3.")
 
       for (colId in 1..<dataFrame.columnsCount()) {
         val roomCode = dataFrame.getColumn(colId).name
@@ -79,7 +73,7 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
         if (answer.equals("yes", true)) {
           premisesCharacteristics.computeIfAbsent(roomCode) { mutableListOf() }.add(characteristic!!)
         } else if (!answer.equals("no", true)) {
-          throw SiteSurveyImportException("Expecting 'yes' or 'no' for question '$question' but is '$answer' on sheet $sheetName.")
+          throw SiteSurveyImportException("Expecting 'yes' or 'no' for question '$question' but is '$answer' on sheet Sheet3.")
         }
       }
     }
@@ -135,7 +129,7 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
     }
   }
 
-  private fun createRoom(roomCode: String, roomName: String): RoomEntity = RoomEntity(
+  private fun createRoom(premisesId: UUID, roomCode: String, roomName: String): RoomEntity = RoomEntity(
     id = UUID.randomUUID(),
     name = roomName,
     code = roomCode,
@@ -205,7 +199,7 @@ class SiteSurvey(characteristicRepository: CharacteristicRepository) {
 //    "Is there provision for people to call for assistance from this room?" to "hasCallForAssistance",
 //    "Can this room be designated as suitable for wheelchair users?   Must answer yes to Q23-26 on previous sheet and Q17-21 on this sheet)" to "isWheelchairDesignated",
 //    "Can this room be designated as suitable for people requiring step free access? (Must answer yes to Q23 and 25 on previous sheet and Q19 on this sheet)" to "isStepFreeDesignated",
-    "Is this room located on the ground floor?" to "IsGroundFloor",
+    "Is this room located on the ground floor?" to "isGroundFloor",
   )
 
   val questionToCharacterEntityMapping = questionToPropertyNameMapping.map { (key, value) ->

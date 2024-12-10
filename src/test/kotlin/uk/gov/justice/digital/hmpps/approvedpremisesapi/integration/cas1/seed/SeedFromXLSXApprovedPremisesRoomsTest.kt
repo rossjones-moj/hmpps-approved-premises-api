@@ -43,7 +43,7 @@ class SeedFromXLSXApprovedPremisesRoomsTest : SeedTestBase() {
     val newRoom = roomRepository.findByCode("SWABI01NEW")
     assertThat(newRoom!!.characteristics).anyMatch {
       it.name == "Is this room located on the ground floor?" &&
-        it.propertyName == "IsGroundFloor"
+        it.propertyName == "isGroundFloor"
     }
 
     val newBed = bedRepository.findByCode("1")
@@ -91,7 +91,7 @@ class SeedFromXLSXApprovedPremisesRoomsTest : SeedTestBase() {
     val updatedRoom = roomRepository.findByCode(roomCode)
     assertThat(updatedRoom!!.characteristics).anyMatch {
       it.name == "Is this room located on the ground floor?" &&
-        it.propertyName == "IsGroundFloor"
+        it.propertyName == "isGroundFloor"
     }
 
     val newBed = bedRepository.findByCode("1")
@@ -144,7 +144,7 @@ class SeedFromXLSXApprovedPremisesRoomsTest : SeedTestBase() {
     val updatedRoom = roomRepository.findByCode(roomCode)
     assertThat(updatedRoom!!.characteristics).anyMatch {
       it.name == "Is this room located on the ground floor?" &&
-        it.propertyName == "IsGroundFloor"
+        it.propertyName == "isGroundFloor"
     }
 
     val existingBed = bedRepository.findByCode("1")

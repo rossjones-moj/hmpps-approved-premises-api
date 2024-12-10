@@ -28,18 +28,8 @@ abstract class SeedJob<RowType>(
 }
 
 @Suppress("TooGenericExceptionThrown")
-abstract class ExcelSeedJob(
-  val fileName: String,
-  val premisesId: UUID,
-  val sheetName: String,
-) {
-  init {
-    if (fileName.contains("/") || fileName.contains("\\")) {
-      throw RuntimeException("Filename must be just the filename of a .xlsx file in the /seed directory, e.g. for /seed/upload.xlsx, just `upload` should be supplied")
-    }
-  }
-
-  abstract fun processDataFrame(dataFrame: DataFrame<*>)
+abstract class ExcelSeedJob {
+  abstract fun processDataFrame(dataFrame: DataFrame<*>, premisesId: UUID)
 }
 
 class SeedException(message: String) : RuntimeException(message)
