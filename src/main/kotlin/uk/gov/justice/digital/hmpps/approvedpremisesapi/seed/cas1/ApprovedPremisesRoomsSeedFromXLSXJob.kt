@@ -36,8 +36,10 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
     var rooms = buildRooms(dataFrame, premisesId)
     val characteristics = buildCharacteristics(dataFrame)
 
-    // add the characteristics to the rooms
-    rooms.forEach { it.characteristics.addAll(characteristics[it.code!!]!!.toList()) }
+    // add the characteristics to the rooms if they exist
+    rooms.forEach {
+      characteristics[it.code]?.let { roomCharacteristics -> it.characteristics.addAll(roomCharacteristics.toList()) }
+    }
 
     // update the rooms
     rooms = createOrUpdateRooms(rooms)
@@ -84,13 +86,13 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
     val beds = mutableListOf<BedEntity>()
     for (i in 1..<dataFrame.columnsCount()) {
       val roomAnswers = dataFrame.getColumn(i)
-      val bedCode = roomAnswers[1].toString()
+      val bedNumber = roomAnswers[1].toString()
       beds.add(
         createBed(
-          "${roomAnswers.name} - $bedCode",
-          bedCode,
+          "${roomAnswers.name} - $bedNumber",
+          "${roomAnswers.name} - $bedNumber",
           rooms.firstOrNull { it.code == roomAnswers.name }
-            ?: throw IllegalArgumentException("Room not found with id ${roomAnswers.name} for bed $bedCode."),
+            ?: throw IllegalArgumentException("Room not found with id ${roomAnswers.name} and code ${roomAnswers.name}."),
         ),
       )
     }
@@ -99,7 +101,7 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
 
   private fun createOrUpdateRooms(rooms: MutableList<RoomEntity>): MutableList<RoomEntity> {
     rooms.forEachIndexed { index, room ->
-      var persistedRoom = roomRepository.findByCode(room.code!!)
+      var persistedRoom = roomRepository.findByCodeAndPremisesId(room.code!!, room.premises.id)
 
       if (persistedRoom == null) {
         roomRepository.save(room)
@@ -118,10 +120,9 @@ class ApprovedPremisesRoomsSeedFromXLSXJob(
 
   private fun createBedsIfNotExist(beds: List<BedEntity>) {
     beds.forEach {
-      val existingBed = bedRepository.findByCode(it.code!!)
+      val existingBed = bedRepository.findByCodeAndRoomId(it.code!!, it.room.id)
       if (existingBed != null) {
         log.info("Bed ${it.id} with code ${it.code} already exists in room code ${it.room.code}.")
-        return
       } else {
         bedRepository.save(it)
         log.info("Created new bed ${it.id} with code ${it.code} and name ${it.name} in room code ${it.room.code}.")

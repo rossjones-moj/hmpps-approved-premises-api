@@ -10,7 +10,8 @@ curl --location --request POST 'http://127.0.0.1:8080/seedFromExcel' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "seedType": "'$1'",
-    "fileName": "'$2'"
+    "premisesId": "'$2'",
+    "fileName": "'$3'"
 }'
 
 echo "Requested job - check the application logs for processing status"

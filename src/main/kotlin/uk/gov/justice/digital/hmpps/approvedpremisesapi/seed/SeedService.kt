@@ -68,15 +68,6 @@ class SeedService(
       }
 
       val job: ExcelSeedJob = when (excelSeedFileType) {
-//        SeedFromExcelFileType.approvedPremisesRoomFromExcel -> ApprovedPremisesRoomsSeedFromXLSXJob(
-//          filename,
-//          premisesId,
-//          "Sheet3",
-//          getBean(PremisesRepository::class),
-//          getBean(RoomRepository::class),
-//          getBean(BedRepository::class),
-//          getBean(SiteSurvey::class),
-//        )
         SeedFromExcelFileType.approvedPremisesRoomFromExcel -> getBean(ApprovedPremisesRoomsSeedFromXLSXJob::class)
       }
 
