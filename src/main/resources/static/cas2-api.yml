@@ -3,12 +3,69 @@ info:
   title: 'Community Accommodation Services: Tier 2 (CAS2)'
   version: 1.0.0
 servers:
-  - url: /cas2
+- url: /cas2
 paths:
+  /demand:
+    post:
+      tags:
+        - Operations on CAS2 demand
+      summary: Creates a new demand record
+      requestBody:
+        description: Details of the demand record
+        content:
+          'application/json':
+            schema:
+              $ref: '_shared.yml#/components/schemas/Cas2Demand'
+        required: true
+      responses:
+        201:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Cas2Demand'
+        400:
+          description: demand has already been submitted
+          content:
+            'application/problem+json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/ValidationError'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
+  /demand/{id}:
+    get:
+      tags:
+        - Operations on CAS2 demand
+      summary: Gets a single CAS2 demand by its ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the demand
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '_shared.yml#/components/schemas/Cas2Demand'
+        401:
+          $ref: '_shared.yml#/components/responses/401Response'
+        403:
+          $ref: '_shared.yml#/components/responses/403Response'
+        500:
+          $ref: '_shared.yml#/components/responses/500Response'
   /applications:
     post:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: Creates a CAS2 application
       requestBody:
         description: Information to create a blank application with
@@ -45,24 +102,24 @@ paths:
       x-codegen-request-body-name: body
     get:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: List summaries of all CAS2 applications authorised for the logged in user
       parameters:
-        - name: isSubmitted
-          in: query
-          description: Returns submitted applications if true, un submitted applications if false, and all applications if absent
-          schema:
-            type: boolean
-        - name: page
-          in: query
-          description: Page number of results to return.  If blank, returns all results
-          schema:
-            type: integer
-        - name: prisonCode
-          in: query
-          description: Prison code of applications to return.  If blank, returns all results.
-          schema:
-            type: string
+      - name: isSubmitted
+        in: query
+        description: Returns submitted applications if true, un submitted applications if false, and all applications if absent
+        schema:
+          type: boolean
+      - name: page
+        in: query
+        description: Page number of results to return.  If blank, returns all results
+        schema:
+          type: integer
+      - name: prisonCode
+        in: query
+        description: Prison code of applications to return.  If blank, returns all results.
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -91,16 +148,16 @@ paths:
   /applications/{applicationId}:
     put:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: Updates a CAS2 application
       parameters:
-        - name: applicationId
-          in: path
-          description: ID of the application
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: applicationId
+        in: path
+        description: ID of the application
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: Information to update the application with
         content:
@@ -130,16 +187,16 @@ paths:
       x-codegen-request-body-name: body
     get:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: Gets a single CAS2 application by its ID
       parameters:
-        - name: applicationId
-          in: path
-          description: ID of the application
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: applicationId
+        in: path
+        description: ID of the application
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         200:
           description: successful operation
@@ -156,16 +213,16 @@ paths:
   /applications/{applicationId}/abandon:
     put:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: Abandons an in progress CAS2 application
       parameters:
-        - name: applicationId
-          in: path
-          description: ID of the application
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: applicationId
+        in: path
+        description: ID of the application
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         200:
           description: successful operation
@@ -182,16 +239,16 @@ paths:
   /assessments/{assessmentId}:
     put:
       tags:
-        - Operations on submitted CAS2 applications (Assessors)
+      - Operations on submitted CAS2 applications (Assessors)
       summary: Updates a single CAS2 assessment by its ID
       parameters:
-        - name: assessmentId
-          in: path
-          description: ID of the assessment
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: assessmentId
+        in: path
+        description: ID of the assessment
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: Information to update the assessment with
         content:
@@ -220,16 +277,16 @@ paths:
           $ref: '_shared.yml#/components/responses/500Response'
     get:
       tags:
-        - Operations on submitted CAS2 applications (Assessors)
+      - Operations on submitted CAS2 applications (Assessors)
       summary: Gets a single CAS2 assessment by its ID
       parameters:
-        - name: assessmentId
-          in: path
-          description: ID of the assessment
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: assessmentId
+        in: path
+        description: ID of the assessment
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         200:
           description: successful operation
@@ -252,16 +309,16 @@ paths:
   /assessments/{assessmentId}/status-updates:
     post:
       tags:
-        - Operations on submitted CAS2 applications (Assessors)
+      - Operations on submitted CAS2 applications (Assessors)
       summary: Creates a status update on an assessment
       parameters:
-        - name: assessmentId
-          in: path
-          description: ID of the assessment whose status is to be updated
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: assessmentId
+        in: path
+        description: ID of the assessment whose status is to be updated
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: Information on the new status to be applied
         content:
@@ -287,16 +344,16 @@ paths:
   /assessments/{assessmentId}/notes:
     post:
       tags:
-        - Operations on CAS2 assessments
+      - Operations on CAS2 assessments
       summary: Add a note to an assessment
       parameters:
-        - name: assessmentId
-          in: path
-          description: ID of the assessment
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: assessmentId
+        in: path
+        description: ID of the assessment
+        required: true
+        schema:
+          type: string
+          format: uuid
       requestBody:
         description: the note to add
         content:
@@ -327,14 +384,14 @@ paths:
   /submissions:
     get:
       tags:
-        - Operations on submitted CAS2 applications (Assessors)
+      - Operations on submitted CAS2 applications (Assessors)
       summary: List summaries of all submitted CAS2 applications
       parameters:
-        - name: page
-          in: query
-          description: Page number of results to return. If blank, returns all results
-          schema:
-            type: integer
+      - name: page
+        in: query
+        description: Page number of results to return. If blank, returns all results
+        schema:
+          type: integer
       responses:
         200:
           description: successful operation
@@ -361,7 +418,7 @@ paths:
           $ref: '_shared.yml#/components/responses/500Response'
     post:
       tags:
-        - Operations on CAS2 applications
+      - Operations on CAS2 applications
       summary: Submits a CAS2 Application (creates a SubmittedApplication)
       requestBody:
         description: Information needed to submit an application
@@ -388,16 +445,16 @@ paths:
   /submissions/{applicationId}:
     get:
       tags:
-        - Operations on submitted CAS2 applications (Assessors)
+      - Operations on submitted CAS2 applications (Assessors)
       summary: Gets a single submitted CAS2 application by its ID
       parameters:
-        - name: applicationId
-          in: path
-          description: ID of the application
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: applicationId
+        in: path
+        description: ID of the application
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         200:
           description: successful operation
@@ -414,15 +471,15 @@ paths:
   /people/search:
     get:
       tags:
-        - People operations
+      - People operations
       summary: Searches for a Person by their Prison Number (NOMIS ID)
       parameters:
-        - name: nomsNumber
-          in: query
-          description: Prison Number to search for
-          required: true
-          schema:
-            type: string
+      - name: nomsNumber
+        in: query
+        description: Prison Number to search for
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -451,15 +508,15 @@ paths:
   /people/{crn}/oasys/risk-to-self:
     get:
       tags:
-        - People operations
+      - People operations
       summary: Returns the Risk To Individual (known as Risk to Self on frontend) section of an OASys.
       parameters:
-        - name: crn
-          in: path
-          description: CRN of the Person to fetch latest OASys
-          required: true
-          schema:
-            type: string
+      - name: crn
+        in: path
+        description: CRN of the Person to fetch latest OASys
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -482,15 +539,15 @@ paths:
   /people/{crn}/oasys/rosh:
     get:
       tags:
-        - People operations
+      - People operations
       summary: Returns the Risk of Serious Harm section of an OASys.
       parameters:
-        - name: crn
-          in: path
-          description: CRN of the Person to fetch latest OASys
-          required: true
-          schema:
-            type: string
+      - name: crn
+        in: path
+        description: CRN of the Person to fetch latest OASys
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -513,15 +570,15 @@ paths:
   /people/{crn}/risks:
     get:
       tags:
-        - People operations
+      - People operations
       summary: Returns the risks for a Person
       parameters:
-        - name: crn
-          in: path
-          description: CRN of the Person to fetch risks for
-          required: true
-          schema:
-            type: string
+      - name: crn
+        in: path
+        description: CRN of the Person to fetch risks for
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -550,7 +607,7 @@ paths:
   /reference-data/application-status:
     get:
       tags:
-        - Reference Data
+      - Reference Data
       summary: Lists all application status update choices
       responses:
         200:
@@ -570,15 +627,15 @@ paths:
   /reports/{reportName}:
     get:
       tags:
-        - Reports
+      - Reports
       summary: Returns a 'report' spreadsheet of metrics
       parameters:
-        - name: reportName
-          in: path
-          description: name of the report to download
-          required: true
-          schema:
-            $ref: '_shared.yml#/components/schemas/Cas2ReportName'
+      - name: reportName
+        in: path
+        description: name of the report to download
+        required: true
+        schema:
+          $ref: '_shared.yml#/components/schemas/Cas2ReportName'
       responses:
         200:
           description: successful operation

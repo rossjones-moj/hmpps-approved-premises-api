@@ -2119,6 +2119,18 @@ components:
         - id
         - name
         - label
+    Cas2Demand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        identifier:
+          type: string
+          example: 'hashed-string'
+          description: 'The unique identifier for the defendant'
+      required:
+        - identifier
     Cas2AssessmentStatusUpdate:
       type: object
       properties:
