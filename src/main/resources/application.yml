@@ -13,6 +13,7 @@ spring:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+      ORDER_MAP_ENTRIES_BY_KEYS: true
 
   profiles:
     group:
@@ -110,7 +111,6 @@ springdoc:
   swagger-ui:
     urls-primary-name: "All CAS"
   remove-broken-reference-definitions: false
-  writer-with-order-by-keys: true
 
 server:
   port: 8080
