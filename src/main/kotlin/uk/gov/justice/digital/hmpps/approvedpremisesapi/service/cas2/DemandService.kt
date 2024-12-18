@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2Demand
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.*
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.results.CasResult
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.UUID
 
 @Service("Cas2DemandService")
@@ -19,6 +22,12 @@ class DemandService(
       Cas2DemandEntity(
         id = UUID.randomUUID(),
         identifier = cas2Demand.identifier,
+        locationType = cas2Demand.locationType,
+        location = cas2Demand.location,
+        primaryReason = cas2Demand.primaryReason,
+        secondaryReason = cas2Demand.secondaryReason,
+        createdAt = convertInstant(cas2Demand.createdAt),
+        decidedAt = convertInstant(cas2Demand.decidedAt),
       ),
     )
 
@@ -27,5 +36,13 @@ class DemandService(
       ?: return CasResult.NotFound()
 
     return CasResult.Success(demandEntity)
+  }
+}
+
+fun convertInstant(instant: Instant?): OffsetDateTime {
+  return instant?.let {
+    OffsetDateTime.ofInstant(instant, ZoneOffset.UTC)
+  } ?: run {
+    OffsetDateTime.now()
   }
 }

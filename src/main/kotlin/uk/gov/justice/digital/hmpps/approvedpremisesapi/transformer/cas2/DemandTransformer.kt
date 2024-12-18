@@ -11,7 +11,12 @@ class DemandTransformer(
   fun transformJpaToApi(jpa: Cas2DemandEntity): Cas2Demand {
     return Cas2Demand(
       id = jpa.id,
-      identifier = jpa.identifier
-    )
-  }
+      identifier = jpa.identifier,
+      locationType = jpa.locationType,
+      location = jpa.location,
+      primaryReason = jpa.primaryReason,
+      secondaryReason = jpa.secondaryReason,
+      createdAt = jpa.createdAt.toInstant(),
+      decidedAt = jpa.createdAt.toInstant(),
+    ) }
 }

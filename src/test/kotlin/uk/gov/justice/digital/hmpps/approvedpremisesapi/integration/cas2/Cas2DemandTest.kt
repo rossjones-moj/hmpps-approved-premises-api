@@ -43,7 +43,10 @@ class Cas2DemandTest : IntegrationTestBase() {
         .header("Authorization", "Bearer $jwt")
         .bodyValue(
           Cas2Demand(
-            identifier = "1"
+            identifier = "1",
+            location = "C1",
+            locationType = "court",
+            primaryReason = "Just because",
           ),
         )
         .exchange()
@@ -64,7 +67,10 @@ class Cas2DemandTest : IntegrationTestBase() {
         .header("Authorization", "Bearer $jwt")
         .bodyValue(
           Cas2Demand(
-            identifier = "1"
+            identifier = "1",
+            location = "C1",
+            locationType = "court",
+            primaryReason = "Just because",
           ),
         )
         .exchange()
@@ -88,7 +94,10 @@ class Cas2DemandTest : IntegrationTestBase() {
         .header("Authorization", "Bearer $jwt")
         .bodyValue(
           Cas2Demand(
-            identifier = "1"
+            identifier = "1",
+            location = "C1",
+            locationType = "court",
+            primaryReason = "Just because",
           ),
         )
         .exchange()

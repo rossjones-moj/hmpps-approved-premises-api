@@ -6,7 +6,7 @@ import jakarta.persistence.Table
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2Demand
+import java.time.OffsetDateTime
 import java.util.*
 
 @Repository
@@ -22,7 +22,14 @@ interface Cas2DemandRepository : JpaRepository<Cas2DemandEntity, UUID> {
 data class Cas2DemandEntity(
   @Id
   val id: UUID,
-  var identifier: String,
-) {
+  val identifier: String,
+  val locationType: String,
+  val location: String,
+  val primaryReason: String,
+  val secondaryReason: String?,
+  val createdAt: OffsetDateTime,
+  val decidedAt: OffsetDateTime,
+
+  ) {
   override fun toString() = "Cas2DemandEntity: $identifier with id: $id"
 }
