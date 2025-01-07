@@ -6303,6 +6303,37 @@ components:
         - id
         - name
         - label
+    Cas2Demand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        identifier:
+          type: string
+          example: 'hashed-string'
+          description: 'The unique identifier for the defendant'
+        createdAt:
+          type: string
+          format: date-time
+        decidedAt:
+          type: string
+          format: date-time
+        locationType:
+          type: string
+          example: 'court'
+        location:
+          type: string
+        primaryReason:
+          type: string
+          example: ""
+        secondaryReason:
+          type: string
+      required:
+        - identifier
+        - locationType
+        - location
+        - primaryReason
     Cas2AssessmentStatusUpdate:
       type: object
       properties:
@@ -9188,6 +9219,7 @@ components:
         - submitted-applications
         - application-status-updates
         - unsubmitted-applications
+        - bail-demand
     NamedId:
       type: object
       description: A generic stub for an object with a name and an ID.

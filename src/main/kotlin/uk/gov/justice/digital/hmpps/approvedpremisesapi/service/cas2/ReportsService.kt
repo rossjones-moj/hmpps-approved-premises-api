@@ -5,11 +5,13 @@ import org.jetbrains.kotlinx.dataframe.api.toDataFrame
 import org.jetbrains.kotlinx.dataframe.io.writeExcel
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.Cas2ApplicationStatusUpdatesReportRepository
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.Cas2BailDemandReportRepository
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.Cas2SubmittedApplicationReportRepository
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.Cas2UnsubmittedApplicationsReportRepository
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.ApplicationStatusUpdatesReportRow
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.SubmittedApplicationReportRow
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.UnsubmittedApplicationsReportRow
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.BailDemandReportRow
 import java.io.OutputStream
 
 @Service
@@ -17,6 +19,7 @@ class ReportsService(
   private val submittedApplicationReportRepository: Cas2SubmittedApplicationReportRepository,
   private val applicationStatusUpdatesReportRepository: Cas2ApplicationStatusUpdatesReportRepository,
   private val unsubmittedApplicationsReportRepository: Cas2UnsubmittedApplicationsReportRepository,
+  private val bailDemandReportRepository: Cas2BailDemandReportRepository,
 ) {
 
   fun createSubmittedApplicationsReport(outputStream: OutputStream) {
@@ -72,6 +75,20 @@ class ReportsService(
         personNoms = row.getPersonNoms(),
         startedBy = row.getStartedBy(),
         startedAt = row.getStartedAt(),
+      )
+    }
+
+    reportData.toDataFrame()
+      .writeExcel(
+        outputStream = outputStream,
+        factory = WorkbookFactory.create(true),
+      )
+  }
+
+  fun createBailDemandReport(outputStream: OutputStream) {
+    val reportData = bailDemandReportRepository.generateBailDemandReport().map { row ->
+      BailDemandReportRow(
+        identifier = row.getIdentifier(),
       )
     }
 
