@@ -25,6 +25,10 @@ class ReportsController(private val reportService: ReportsService) : ReportsCas2
           outputStream ->
         reportService.createUnsubmittedApplicationsReport(outputStream)
       }
+      Cas2ReportName.bailMinusDemand -> generateXlsxStreamingResponse {
+          outputStream ->
+        reportService.createBailDemandReport(outputStream)
+      }
     }
   }
 }

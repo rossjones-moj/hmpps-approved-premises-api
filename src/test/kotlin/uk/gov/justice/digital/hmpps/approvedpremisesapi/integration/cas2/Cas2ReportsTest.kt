@@ -14,16 +14,19 @@ import org.junit.jupiter.params.provider.ValueSource
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.events.cas2.model.Cas2ApplicationStatusUpdatedEvent
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.events.cas2.model.Cas2ApplicationSubmittedEvent
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.events.cas2.model.Cas2StatusDetail
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2Demand
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.events.cas2.model.EventType
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.api.model.Cas2ReportName
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.factory.events.cas2.Cas2ApplicationStatusUpdatedEventDetailsFactory
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.factory.events.cas2.Cas2ApplicationSubmittedEventDetailsFactory
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.factory.events.cas2.Cas2StatusFactory
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.integration.IntegrationTestBase
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.Cas2BailDemandReportRow
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.jpa.entity.DomainEventType
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.ApplicationStatusUpdatesReportRow
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.SubmittedApplicationReportRow
 import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.UnsubmittedApplicationsReportRow
+import uk.gov.justice.digital.hmpps.approvedpremisesapi.reporting.model.cas2.BailDemandReportRow
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -492,6 +495,46 @@ class Cas2ReportsTest : IntegrationTestBase() {
           val actual = DataFrame
             .readExcel(it.responseBody!!.inputStream())
             .convertTo<UnsubmittedApplicationsReportRow>(ExcessiveColumns.Remove)
+
+          Assertions.assertThat(actual).isEqualTo(expectedDataFrame)
+        }
+    }
+  }
+
+  @Nested
+  inner class BailDemand {
+    @Test
+    fun `streams spreadsheet of data from bail demand information, newest first`() {
+      val entry = cas2DemandEntityFactory.produceAndPersist{
+        withIdentifier(UUID.randomUUID().toString())
+        withLocationAndType("LEI", "Prison")
+        withPrimaryReason("Primary")
+        withSecondaryReason("Secondary")
+        withCreatedAt(OffsetDateTime.now())
+        withDecidedAt(OffsetDateTime.now())
+      }
+
+      val expectedDataFrame = listOf(
+        BailDemandReportRow(identifier=entry.identifier)
+      ).toDataFrame()
+
+      val jwt = jwtAuthHelper.createClientCredentialsJwt(
+        username = "username",
+        authSource = "nomis",
+        roles = listOf("ROLE_PRISON", "ROLE_CAS2_MI"),
+      )
+
+      webTestClient.get()
+        .uri("/cas2/reports/bail-demand")
+        .header("Authorization", "Bearer $jwt")
+        .exchange()
+        .expectStatus()
+        .isOk
+        .expectBody()
+        .consumeWith {
+          val actual = DataFrame
+            .readExcel(it.responseBody!!.inputStream())
+            .convertTo<BailDemandReportRow>(ExcessiveColumns.Remove)
 
           Assertions.assertThat(actual).isEqualTo(expectedDataFrame)
         }

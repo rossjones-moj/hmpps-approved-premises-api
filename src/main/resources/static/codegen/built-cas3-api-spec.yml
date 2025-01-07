@@ -5035,6 +5035,7 @@ components:
         - submitted-applications
         - application-status-updates
         - unsubmitted-applications
+        - bail-demand
     NamedId:
       type: object
       description: A generic stub for an object with a name and an ID.

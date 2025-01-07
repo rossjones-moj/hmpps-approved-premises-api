@@ -140,7 +140,7 @@ class Cas2DemandTest : IntegrationTestBase() {
 
       val nullUUID = "00000000-0000-0000-0000-000000000000"
 
-      val returnedDemand = webTestClient.get()
+      webTestClient.get()
         .uri("/cas2/demand/${nullUUID}")
         .header("Authorization", "Bearer $jwt")
         .exchange()
